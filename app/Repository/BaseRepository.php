@@ -17,11 +17,11 @@ class BaseRepository
         $this->model = $model;
     }
 
-    public function create(array $data,string $scope = null,array $scopeIds = null)
+    public function create(array $data, string $scope = null, array $scopeIds = null)
     {
         $model = $this->model::create($data);
 
-        if(!is_null($scope)){
+        if (!is_null($scope)) {
             $model->$scope()->attach($scopeIds);
         }
 
@@ -39,15 +39,25 @@ class BaseRepository
         $model->save();
     }
 
-    public function find($id): Model
+    public function updateChangedAttributes(array $attributes)
     {
-        $model = $this->model->find($id);
+        $this->model->update($attributes);
+        $this->model->save();
+    }
 
-        if (is_null($model)) {
+    public function find($id, $with = null): Model
+    {
+        if (!is_null($with)) {
+            $this->model->with($with);
+        }
+
+        $this->model = $this->model->find($id);
+
+        if (is_null($this->model)) {
             $this->jsonErrorResponse("$this->model not found");
         }
 
-        return $model;
+        return $this->model;
     }
 
     public function jsonErrorResponse($message, int $status = Response::HTTP_NOT_FOUND): HttpResponseException
@@ -78,5 +88,15 @@ class BaseRepository
         }
 
         return $record;
+    }
+
+    public function delete(int $id): JsonResponse
+    {
+        $this->find($id);
+        $this->model->delete();
+
+        return $this->jsonResponse([
+            'message' => CommonOutputMessages::RECORD_DELETED
+        ], Response::HTTP_NO_CONTENT);
     }
 }

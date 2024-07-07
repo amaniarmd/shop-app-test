@@ -4,6 +4,9 @@ namespace App\Enums\Product;
 
 final class Entries
 {
+    public const CATEGORY_RELATION = "category";
+    public const VARIANT_VALUE_RELATION = "variants.value";
+
     public const CATEGORY_NAMES = [
         'mobile',
         'laptop',
