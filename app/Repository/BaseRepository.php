@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Enums\CommonFields;
 use App\Enums\CommonOutputMessages;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
