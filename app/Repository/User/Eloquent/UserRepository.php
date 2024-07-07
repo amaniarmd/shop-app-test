@@ -6,6 +6,7 @@ use App\Enums\CommonFields;
 use App\Enums\User\Entries;
 use App\Enums\User\Fields;
 use App\Enums\User\OutputMessages;
+use App\Jobs\User\SendEmailJob;
 use App\Models\User;
 use App\Repository\BaseRepository;
 use App\Repository\User\Interfaces\UserInterface;
@@ -36,6 +37,8 @@ class UserRepository extends BaseRepository implements UserInterface
         }
 
         $this->create($data);
+
+        SendEmailJob::dispatch($data[Fields::EMAIL])->onQueue(Entries::EMAILS_QUEUE_NAME);
 
         return $this->jsonResponse(
             [CommonFields::MESSAGE => OutputMessages::USER_SUCCESSFULLY_REGISTERED], Response::HTTP_CREATED
