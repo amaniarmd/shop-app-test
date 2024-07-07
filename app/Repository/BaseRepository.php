@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Enums\CommonFields;
-use App\Enums\OutputMessages;
+use App\Enums\CommonOutputMessages;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
@@ -75,7 +75,7 @@ class BaseRepository
         $record = $this->model->where($attribute, $operator, $value)->first();
 
         if (is_null($record)) {
-            $this->jsonErrorResponse(OutputMessages::RECORD_NOT_FOUND);
+            $this->jsonErrorResponse(CommonOutputMessages::RECORD_NOT_FOUND);
         }
 
         return $record;
